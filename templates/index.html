@@ -1,35 +1,43 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CatInt</title>
+    <title>hcint</title>
     <link rel="stylesheet" type="text/css" href="static/styles.css" />
 </head>
 <body>
-    <div>
-        <h1>Hash Details / Upload</h1>
-        <form action="/submit" method="post">
-            <label for="hash">hash value:</label>
-            <input type="text" id="hash" name="hash">
-            <br>
-            <label for="hash_id">hash type:</label>
-            <select id="hash_id" name="hash_id">
-                <option value="MD5">MD5</option>
-                <option value="BASE64">BASE64</option>
-                <option value="ROT13">ROT13</option>
-                <option value="NTLMv2">NTLMv2</option>
-            </select>
-            <button type="submit" class="fakeButtons">CRACK HASH</button>
-        </form>
-    </div>
-    <br>
-    <div>
-    <h1>Hashcat Output</h1>
-    <pre>hashcat version: {{ hashcat_output }}</pre>
-    <p>hashcat version: {{ hashcat_output }}</p>
+    <header>
+        <h1 class="main-title">
+            <img src="https://img.icons8.com/ios-filled/50/00FF00/cat.png" alt="Cat Icon" class="icon">
+            hcint
+        </h1>
+    </header>
+    <div class="container">
+        <main>
+            <h2>Hash Details / Upload</h2>
+            <form action="/submit" method="post">
+                <div class="form-group">
+                    <label for="hash">Hash value:</label>
+                    <input type="text" id="hash" name="hash">
+                </div>
+                <div class="form-group">
+                    <label for="hash_id">Hash type:</label>
+                    <select id="hash_id" name="hash_id">
+                        <option value="MD5">MD5</option>
+                        <option value="BASE64">BASE64</option>
+                        <option value="ROT13">ROT13</option>
+                        <option value="NTLMv2">NTLMv2</option>
+                    </select>
+                </div>
+                <button type="submit" class="button">Crack Hash</button>
+            </form>
+        </main>
+        <section>
+            <h2>Hashcat Output</h2>
+            <pre>Hashcat version: {{ hashcat_output }}</pre>
+            <p>Hashcat version: {{ hashcat_output }}</p>
+        </section>
     </div>
 </body>
 </html>
