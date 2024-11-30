@@ -1,104 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>hcint</title>
-	<link rel="stylesheet" type="text/css" href="static/styles.css" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hcInt</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #121212;
+            color: #f5f5f5;
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e1e1e;
+            color: #00FF00;
+            padding: 20px;
+            border-bottom: 2px solid #00FF00;
+        }
+
+        header img {
+            margin-right: 10px;
+            filter: drop-shadow(0 0 5px #00FF00);
+        }
+
+        header h1 {
+            font-size: 2rem;
+        }
+
+        .main-content {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #00FF00;
+            margin-bottom: 20px;
+        }
+
+        .styled-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #00FF00;
+        }
+
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+            font-size: 1rem;
+            background: #121212;
+            color: #f5f5f5;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #00FF00;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-group button {
+            background: #00FF00;
+            color: #121212;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .button-group button:hover {
+            background: #00cc00;
+        }
+
+        .info-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #121212;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 255, 0, 0.1);
+        }
+
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            color: #00FF00;
+        }
+
+        #output-section {
+            margin-top: 30px;
+        }
+
+        .output {
+            background: #000;
+            color: #00FF00;
+            padding: 15px;
+            border-radius: 5px;
+            height: 150px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <img src="https://img.icons8.com/ios-filled/50/00FF00/cat.png" alt="Cat Icon" class="icon">
-        <h1 class="main-title">
-            hcInt
-        </h1>
+        <img src="https://img.icons8.com/ios-filled/50/00FF00/cat.png" alt="Cat Icon">
+        <h1>hcInt</h1>
     </header>
-    <div>
-        <h1>Hash Details / Upload</h1>
-        <form action="/submit" method="post">
-	        <label for="attack_mode">attack mode:</label>
-			<select id="attack_mode" name="attack_mode">
-				<option value="straight">Straight (type: 0)</option>
-			</select>
-			<br>
-			<label for="hash_type">hash type:</label>
-			<select id="hash_type" name="hash_type">
-				<option value="MD5">MD5</option>
-				<option value="NTLMV1">NTLMv1</option>
-				<option value="NTLMV1NT">NTLMv1_NT</option>
-				<option value="NTLMV2">NTLMv2</option>
-				<option value="NTLMV2NT">NTLMv2_NT</option>
-			</select>
-			<br>
-			<label for="hash_value">hash value:</label>
-			<input type="text" id="hash_value" name="hash_value" placeholder="8743b52063cd84097a65d1633f5c74f5">
-			<br>
-			<label for="wordlist_used">wordlist used:</label>
-			<select id="wordlist_used" name="wordlist_used">
-				{% for key in wordlist_urls %}
-					<option value="{{ key }}">{{ key }}</option>
-				{% endfor %}
-				<option value="url-input">enter URL</option>
-			</select>
-			<br>
-			<label for="wordlist_url" style="display: none;">wordlist URL:</label>
-			<input type="text" id="wordlist_url" name="wordlist_url" placeholder="https://example.com/wordlist.txt">
-			<br>
-			<button type="submit" formaction="/downloadwl">DOWNLOAD WORDLISTS</button> <button type="submit">CRACK HASH</button>
-		</form>
-	</div>
-	<br>
-	<div>
-		<h2>Hashcat Info</h2>
-		<pre><strong>hashcat version:</strong> {{ hc_version }}</pre>
-		{% if  wl_route_hit %}
-			<pre><strong>Wordlist download status code:</strong> {{ dl_status }}</pre>
-		{% endif %}
-		{% if hash_value and hash_type %}
-			<pre><strong>Attack Mode:</strong> {{ attack_mode }}</pre>
-			<pre><strong>Hash Value:</strong> {{ hash_value }}</pre>
-			<pre><strong>Hash Type Code:</strong> {{ hash_type }}</pre>
-		{% endif %}
-	</div>
 
-	{% if route_hit %}
-	<br>
-	<div id="output"></div>
-	<script>
-		var eventSource = new EventSource('/stream');
-		eventSource.onmessage = function(event) {
-			document.getElementById('output').innerHTML += event.data + "<br/>";
-			var outputDiv = document.getElementById('output');
-			outputDiv.scrollTop = outputDiv.scrollHeight;
-		};
-		eventSource.onerror = function(error) {
-			console.error('Error:', error);
-			eventSource.close();
-		};
-	</script>
-    {% endif %}
+    <div class="main-content">
+        <section class="form-section">
+            <h1>Hash Details / Upload</h1>
+            <form action="/submit" method="post" class="styled-form">
+                <div class="form-group">
+                    <label for="attack_mode">Attack Mode:</label>
+                    <select id="attack_mode" name="attack_mode">
+                        <option value="straight">Straight (type: 0)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hash_type">Hash Type:</label>
+                    <select id="hash_type" name="hash_type">
+                        <option value="MD5">MD5</option>
+                        <option value="NTLMV1">NTLMv1</option>
+                        <option value="NTLMV1NT">NTLMv1_NT</option>
+                        <option value="NTLMV2">NTLMv2</option>
+                        <option value="NTLMV2NT">NTLMv2_NT</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hash_value">Hash Value:</label>
+                    <input type="text" id="hash_value" name="hash_value" placeholder="8743b52063cd84097a65d1633f5c74f5">
+                </div>
+
+                <div class="form-group">
+                    <label for="wordlist_used">Wordlist Used:</label>
+                    <select id="wordlist_used" name="wordlist_used">
+                        <option value="url-input">Enter URL</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="wordlist-url-group" style="display: none;">
+                    <label for="wordlist_url">Wordlist URL:</label>
+                    <input type="text" id="wordlist_url" name="wordlist_url" placeholder="https://example.com/wordlist.txt" style="width: 100%;">
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" formaction="/downloadwl">Download Wordlists</button>
+                    <button type="submit">Crack Hash</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="info-section">
+            <h2>Hashcat Info</h2>
+            <pre><strong>Hashcat Version:</strong> {{ hc_version }}</pre>
+            {% if wl_route_hit %}
+            <pre><strong>Wordlist Download Status Code:</strong> {{ dl_status }}</pre>
+            {% endif %}
+            {% if hash_value and hash_type %}
+            <pre><strong>Attack Mode:</strong> {{ attack_mode }}</pre>
+            <pre><strong>Hash Value:</strong> {{ hash_value }}</pre>
+            <pre><strong>Hash Type Code:</strong> {{ hash_type }}</pre>
+            {% endif %}
+        </section>
+
+        {% if route_hit %}
+        <section id="output-section">
+            <div id="output" class="output"></div>
+        </section>
+        <script>
+            var eventSource = new EventSource('/stream');
+            eventSource.onmessage = function(event) {
+                document.getElementById('output').innerHTML += event.data + "<br/>";
+                var outputDiv = document.getElementById('output');
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+            };
+            eventSource.onerror = function(error) {
+                console.error('Error:', error);
+                eventSource.close();
+            };
+        </script>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleWordlistUrl();
+            document.getElementById('wordlist_used').addEventListener('change', toggleWordlistUrl);
+
+            function toggleWordlistUrl() {
+                const wordlistGroup = document.getElementById('wordlist-url-group');
+                if (document.getElementById('wordlist_used').value === 'url-input') {
+                    wordlistGroup.style.display = 'block';
+                } else {
+                    wordlistGroup.style.display = 'none';
+                }
+            }
+        });
+    </script>
 </body>
-
-<script>
-    $(document).ready(function() {
-		// Check the dropdown selection on page load
-		toggleWordlistUrl();
-
-		// Listen for change events on the dropdown
-		$('#wordlist_used').change(function() {
-			toggleWordlistUrl();
-		});
-
-		// Function to show or hide the wordlist_url input based on the selected option
-		function toggleWordlistUrl() {
-			if ($('#wordlist_used').val() === 'url-input') {
-				$('#wordlist_url, label[for="wordlist_url"]').show();  // Show the wordlist_url input and label
-			} else {
-					$('#wordlist_url, label[for="wordlist_url"]').hide();  // Show the wordlist_url input and label
-			}
-		}
-});
-</script>
-
 </html>
